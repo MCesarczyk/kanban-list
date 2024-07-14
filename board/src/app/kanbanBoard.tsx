@@ -3,7 +3,7 @@ import { DndContext, rectIntersection } from '@dnd-kit/core';
 import { Flex } from '@chakra-ui/react';
 import KanbanLane from './kanbanLane';
 import { AddCard } from './addCard';
-import { Card } from './types';
+import { Card, TaskState } from './types';
 export default function KanbanBoard() {
   const [todoItems, setTodoItems] = useState<Array<Card>>([]);
   const [doneItems, setDoneItems] = useState<Array<Card>>([]);
@@ -21,31 +21,31 @@ export default function KanbanBoard() {
         const index = e.active.data.current?.index ?? 0;
         const parent = e.active.data.current?.parent;
 
-        if (container === undefined && parent === 'Unassigned') {
+        if (container === undefined && parent === TaskState.UNASSIGNED) {
           return;
         }
 
-        if (container === 'ToDo') {
+        if (container === TaskState.TODO) {
           setTodoItems([...todoItems, { title }]);
-        } else if (container === 'Done') {
+        } else if (container === TaskState.DONE) {
           setDoneItems([...doneItems, { title }]);
-        } else if (container === 'In Progress') {
+        } else if (container === TaskState.IN_PROGRESS) {
           setInProgressItems([...inProgressItems, { title }]);
         } else {
           setuItems([...uItems, { title }]);
         }
 
-        if (parent === 'ToDo') {
+        if (parent === TaskState.TODO) {
           setTodoItems([
             ...todoItems.slice(0, index),
             ...todoItems.slice(index + 1),
           ]);
-        } else if (parent === 'Done') {
+        } else if (parent === TaskState.DONE) {
           setDoneItems([
             ...doneItems.slice(0, index),
             ...doneItems.slice(index + 1),
           ]);
-        } else if (parent === 'In Progress') {
+        } else if (parent === TaskState.IN_PROGRESS) {
           setInProgressItems([
             ...inProgressItems.slice(0, index),
             ...inProgressItems.slice(index + 1),
@@ -59,10 +59,10 @@ export default function KanbanBoard() {
         <h1>Kanban board</h1>
         <AddCard addCard={addNewCard} />
         <Flex flex="3" gap="4">
-          <KanbanLane title="Unassigned" items={uItems} />
-          <KanbanLane title="ToDo" items={todoItems} />
-          <KanbanLane title="In Progress" items={inProgressItems} />
-          <KanbanLane title="Done" items={doneItems} />
+          <KanbanLane title={TaskState.UNASSIGNED} items={uItems} />
+          <KanbanLane title={TaskState.TODO} items={todoItems} />
+          <KanbanLane title={TaskState.IN_PROGRESS} items={inProgressItems} />
+          <KanbanLane title={TaskState.DONE} items={doneItems} />
         </Flex>
       </Flex>
     </DndContext>

@@ -14,7 +14,7 @@ export default function KanbanLane({ title, items }: KanbanLaneProps) {
   });
   return (
     <Flex flex="3" padding="5" flexDirection="column" minH="10rem" border="1px solid lightgray">
-      <Text fontWeight="bold">{title}</Text>
+      <Text fontWeight="bold" textTransform="capitalize">{title.replace('_',' ')}</Text>
       <Flex
         ref={setNodeRef}
         backgroundColor="gray.200"
