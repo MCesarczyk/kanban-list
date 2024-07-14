@@ -1,14 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import styles from './app.module.css';
-
-import NxWelcome from './nx-welcome';
+import KanbanBoard from './kanbanBoard';
 
 export function App() {
-  return (
-    <div>
-      <NxWelcome title="board" />
-    </div>
-  );
+  return <KanbanBoard />;
 }
-
-export default App;
