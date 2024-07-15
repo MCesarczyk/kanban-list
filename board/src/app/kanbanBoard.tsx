@@ -1,17 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DndContext, rectIntersection } from '@dnd-kit/core';
 import { Flex } from '@chakra-ui/react';
-import KanbanLane from './kanbanLane';
+import { KanbanLane } from './kanbanLane';
 import { AddCard } from './addCard';
 import { Task, TaskState } from './types';
-export default function KanbanBoard() {
+import { tasksMock } from './fixtures';
+import { filterTasksByState } from './helpers';
+
+export function KanbanBoard() {
+  const [tasks, setTasks] = useState<Array<Task>>(tasksMock as Task[]);
   const [todoItems, setTodoItems] = useState<Array<Task>>([]);
   const [doneItems, setDoneItems] = useState<Array<Task>>([]);
   const [inProgressItems, setInProgressItems] = useState<Array<Task>>([]);
   const [uItems, setuItems] = useState<Array<Task>>([]);
+
+  useEffect(() => {
+    console.log(tasks);
+  }, [tasks]);
+
   const addNewCard = (task: Task) => {
-    setuItems([...uItems, task]);
+    setTasks([...tasks, task]);
   };
+
   return (
     <DndContext
       collisionDetection={rectIntersection}
@@ -67,10 +77,26 @@ export default function KanbanBoard() {
         <h1>Kanban board</h1>
         <AddCard addCard={addNewCard} />
         <Flex flex="3" gap="4">
-          <KanbanLane title={TaskState.UNASSIGNED} items={uItems} />
-          <KanbanLane title={TaskState.TODO} items={todoItems} />
-          <KanbanLane title={TaskState.IN_PROGRESS} items={inProgressItems} />
-          <KanbanLane title={TaskState.DONE} items={doneItems} />
+          <KanbanLane
+            title="Unassigned"
+            state={TaskState.UNASSIGNED}
+            items={filterTasksByState(tasks, TaskState.UNASSIGNED)}
+          />
+          <KanbanLane
+            title="Todo"
+            state={TaskState.TODO}
+            items={filterTasksByState(tasks, TaskState.TODO)}
+          />
+          <KanbanLane
+            title="In Progress"
+            state={TaskState.IN_PROGRESS}
+            items={filterTasksByState(tasks, TaskState.IN_PROGRESS)}
+          />
+          <KanbanLane
+            title="Done"
+            state={TaskState.DONE}
+            items={filterTasksByState(tasks, TaskState.DONE)}
+          />
         </Flex>
       </Flex>
     </DndContext>

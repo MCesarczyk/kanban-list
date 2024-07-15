@@ -1,4 +1,4 @@
-import KanbanBoard from './kanbanBoard';
+import { KanbanBoard } from './kanbanBoard';
 
 export function App() {
   return <KanbanBoard />;
