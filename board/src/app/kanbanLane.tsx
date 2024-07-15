@@ -1,11 +1,11 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { useDroppable } from "@dnd-kit/core";
 import { KanbanCard } from "./kanbanCard";
-import { Card } from "./types";
+import { Task } from "./types";
 
 interface KanbanLaneProps {
   title: string;
-  items: Card[];
+  items: Task[];
 }
 
 export default function KanbanLane({ title, items }: KanbanLaneProps) {
@@ -23,8 +23,8 @@ export default function KanbanLane({ title, items }: KanbanLaneProps) {
         padding="2"
         flexDirection="column"
       >
-        {items.map(({ title: cardTitle }, key) => (
-          <KanbanCard title={cardTitle} key={key} index={key} parent={title} />
+        {items.map((task, key) => (
+          <KanbanCard task={task} key={key} index={key} parent={title} />
         ))}
       </Flex>
     </Flex>

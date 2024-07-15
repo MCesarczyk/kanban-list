@@ -3,36 +3,44 @@ import { DndContext, rectIntersection } from '@dnd-kit/core';
 import { Flex } from '@chakra-ui/react';
 import KanbanLane from './kanbanLane';
 import { AddCard } from './addCard';
-import { Card, TaskState } from './types';
+import { Task, TaskState } from './types';
 export default function KanbanBoard() {
-  const [todoItems, setTodoItems] = useState<Array<Card>>([]);
-  const [doneItems, setDoneItems] = useState<Array<Card>>([]);
-  const [inProgressItems, setInProgressItems] = useState<Array<Card>>([]);
-  const [uItems, setuItems] = useState<Array<Card>>([]);
-  const addNewCard = (title: string) => {
-    setuItems([...uItems, { title }]);
+  const [todoItems, setTodoItems] = useState<Array<Task>>([]);
+  const [doneItems, setDoneItems] = useState<Array<Task>>([]);
+  const [inProgressItems, setInProgressItems] = useState<Array<Task>>([]);
+  const [uItems, setuItems] = useState<Array<Task>>([]);
+  const addNewCard = (task: Task) => {
+    setuItems([...uItems, task]);
   };
   return (
     <DndContext
       collisionDetection={rectIntersection}
       onDragEnd={(e) => {
         const container = e.over?.id;
-        const title = e.active.data.current?.title ?? '';
+        const taskId = e.active.data.current?.id ?? '';
         const index = e.active.data.current?.index ?? 0;
         const parent = e.active.data.current?.parent;
+
+        const allTasks = [
+          ...todoItems,
+          ...doneItems,
+          ...inProgressItems,
+          ...uItems,
+        ];
+        const currentTask = allTasks.find((task) => task.id === taskId);
 
         if (container === undefined && parent === TaskState.UNASSIGNED) {
           return;
         }
 
-        if (container === TaskState.TODO) {
-          setTodoItems([...todoItems, { title }]);
-        } else if (container === TaskState.DONE) {
-          setDoneItems([...doneItems, { title }]);
-        } else if (container === TaskState.IN_PROGRESS) {
-          setInProgressItems([...inProgressItems, { title }]);
+        if (container === TaskState.TODO && !!currentTask) {
+          setTodoItems([...todoItems, currentTask]);
+        } else if (container === TaskState.DONE && !!currentTask) {
+          setDoneItems([...doneItems, currentTask]);
+        } else if (container === TaskState.IN_PROGRESS && !!currentTask) {
+          setInProgressItems([...inProgressItems, currentTask]);
         } else {
-          setuItems([...uItems, { title }]);
+          !!currentTask && setuItems([...uItems, currentTask]);
         }
 
         if (parent === TaskState.TODO) {

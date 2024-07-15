@@ -8,3 +8,10 @@ export enum TaskState {
   IN_PROGRESS = 'in_progress',
   DONE = 'done'
 }
+
+export interface Task {
+  id: string;
+  content: string;
+  state: TaskState;
+  userId: string;
+}
