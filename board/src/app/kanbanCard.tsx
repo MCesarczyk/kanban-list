@@ -1,20 +1,24 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { Task } from "./types";
 
-export const KanbanCard = ({
-  title,
-  index,
-  parent,
-}: {
-  title: string;
+interface KanbanCardProps {
+  task: Task;
   index: number;
   parent: string;
-}) => {
+}
+
+export const KanbanCard = ({
+  task,
+  index,
+  parent,
+}: KanbanCardProps) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: title,
+    id: task.id,
     data: {
-      title,
+      id: task.id,
+      content: task.content,
       index,
       parent,
     },
@@ -35,7 +39,7 @@ export const KanbanCard = ({
       {...attributes}
       ref={setNodeRef}
     >
-      <Text>{title}</Text>
+      <Text>{task.content}</Text>
     </Flex>
   );
 };

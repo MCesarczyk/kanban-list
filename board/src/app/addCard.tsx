@@ -1,23 +1,24 @@
-import styled from "@emotion/styled";
 import { FormEvent } from "react";
+import styled from "@emotion/styled";
+import { Task, TaskState } from "./types";
 
 interface AddCardProps {
-  addCard: (title: string) => void;
+  addCard: (task: Task) => void;
 }
 
 export const AddCard = ({ addCard }: AddCardProps) => {
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const name = formData.get("name");
-    if (typeof name === "string") {
-      addCard(name);
+    const content = formData.get("content");
+    if (typeof content === "string") {
+      addCard({id: Math.random().toString().slice(2), content, state: TaskState.UNASSIGNED, userId: 'user123'});
     }
   }
 
   return (
     <Form onSubmit={onFormSubmit}>
-      <Input type="text" name="name" />
+      <Input type="text" name="content" />
       <Button>Add</Button>
     </Form>
   );
@@ -38,6 +39,6 @@ const Button = styled.button`
   color: white;
   border: 1px solid black;
   border-radius: 4px;
-  padding: 2px 8px;
+  padding: px 8px;
   cursor: pointer;
 `;
