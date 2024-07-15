@@ -11,7 +11,7 @@ interface KanbanLaneProps {
 
 export function KanbanLane({ title, state, items }: KanbanLaneProps) {
   const { setNodeRef } = useDroppable({
-    id: title,
+    id: state,
   });
   return (
     <Flex flex="3" padding="5" flexDirection="column" minH="10rem" border="1px solid lightgray">

@@ -12,7 +12,7 @@ export const AddCard = ({ addCard }: AddCardProps) => {
     const formData = new FormData(e.target as HTMLFormElement);
     const content = formData.get("content");
     if (typeof content === "string") {
-      addCard({id: '123xyz', content, state: TaskState.UNASSIGNED, userId: 'user123'});
+      addCard({id: Math.random().toString().slice(2), content, state: TaskState.UNASSIGNED, userId: 'user123'});
     }
   }
 
