@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { DndContext, rectIntersection } from '@dnd-kit/core';
+import { rectIntersection } from '@dnd-kit/core';
 import { Flex } from '@chakra-ui/react';
 import { KanbanLane } from './kanbanLane';
 import { AddCard } from './addCard';
 import { Task, TaskState } from './types';
 import { tasksMock } from './fixtures';
 import { filterTasksByState } from './helpers';
+import { DragDropContainer } from './sensors';
 
 export function KanbanBoard() {
   const [tasks, setTasks] = useState<Array<Task>>(tasksMock as Task[]);
@@ -15,7 +16,7 @@ export function KanbanBoard() {
   };
 
   return (
-    <DndContext
+    <DragDropContainer
       collisionDetection={rectIntersection}
       onDragEnd={(e) => {
         const container = e.over?.id;
@@ -73,6 +74,6 @@ export function KanbanBoard() {
           />
         </Flex>
       </Flex>
-    </DndContext>
+    </DragDropContainer>
   );
 }
