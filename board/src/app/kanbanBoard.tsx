@@ -30,17 +30,25 @@ export function KanbanBoard() {
         }
 
         const newTasks = tasks.filter((task) => task.id !== taskId);
-        if (container === TaskState.TODO && !!currentTask) {
-          setTasks([...newTasks, { ...currentTask, state: TaskState.TODO }]);
-        } else if (container === TaskState.DONE && !!currentTask) {
-          setTasks([...newTasks, { ...currentTask, state: TaskState.DONE }]);
-        } else if (container === TaskState.IN_PROGRESS && !!currentTask) {
-          setTasks([
-            ...newTasks,
-            { ...currentTask, state: TaskState.IN_PROGRESS },
-          ]);
-        } else {
-          !!currentTask &&
+
+        if (!currentTask) {
+          return;
+        }
+
+        switch (container) {
+          case TaskState.TODO:
+            setTasks([...newTasks, { ...currentTask, state: TaskState.TODO }]);
+            break;
+          case TaskState.DONE:
+            setTasks([...newTasks, { ...currentTask, state: TaskState.DONE }]);
+            break;
+          case TaskState.IN_PROGRESS:
+            setTasks([
+              ...newTasks,
+              { ...currentTask, state: TaskState.IN_PROGRESS },
+            ]);
+            break;
+          default:
             setTasks([
               ...newTasks,
               { ...currentTask, state: TaskState.UNASSIGNED },
