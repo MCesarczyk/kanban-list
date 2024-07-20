@@ -1,15 +1,35 @@
 import { useState } from 'react';
 import { rectIntersection } from '@dnd-kit/core';
 import { Flex } from '@chakra-ui/react';
+import styled from '@emotion/styled';
 import { KanbanLane } from './kanbanLane';
 import { AddCard } from './addCard';
 import { Task, TaskState } from './types';
 import { tasksMock } from './fixtures';
 import { filterTasksByState } from './helpers';
 import { DragDropContainer } from './sensors';
+import { Trash } from './trash';
 
 export function KanbanBoard() {
   const [tasks, setTasks] = useState<Array<Task>>(tasksMock as Task[]);
+  const [proposedTasks, setProposedTasks] = useState<Array<Task>>([]);
+
+  const [confirmationPrompt, setConfirmationPrompt] = useState(false);
+
+  const onItemDelete = () => {
+    setConfirmationPrompt(true);
+
+    setTimeout(() => {
+      setConfirmationPrompt(false);
+      setProposedTasks([]);
+    }, 2_000);
+  }
+  
+  const onDeleteConfirmation = () => {
+    setTasks([...proposedTasks]);
+    setConfirmationPrompt(false);
+    setProposedTasks([]);
+  }
 
   const addNewCard = (task: Task) => {
     setTasks([...tasks, task]);
@@ -36,6 +56,10 @@ export function KanbanBoard() {
         }
 
         switch (container) {
+          case 'REMOVE':
+            onItemDelete();
+            setProposedTasks([...newTasks]);
+            break;
           case TaskState.TODO:
             setTasks([...newTasks, { ...currentTask, state: TaskState.TODO }]);
             break;
@@ -58,7 +82,10 @@ export function KanbanBoard() {
     >
       <Flex flexDirection="column" gap="4" padding="4">
         <h1>Kanban board</h1>
-        <AddCard addCard={addNewCard} />
+        <Flex gap="4" justifyContent="space-between">
+          <AddCard addCard={addNewCard} />
+          {confirmationPrompt ? <ConfirmationButton onClick={onDeleteConfirmation}>Confirm</ConfirmationButton> : <Trash />}
+        </Flex>
         <Flex flex="3" gap="4">
           <KanbanLane
             title="Unassigned"
@@ -84,4 +111,15 @@ export function KanbanBoard() {
       </Flex>
     </DragDropContainer>
   );
-}
+};
+
+const ConfirmationButton = styled.button`
+  background-color: orange;
+  color: black;
+  border: 1px solid black;
+  border-radius: 8px;
+  border: none;
+  padding: 8px;
+  text-transform: capitalize;
+  cursor: pointer;
+`;
